@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>S I M</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>SURAT TANDA MENGEMUDI</div>
+    </body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <title>HOLAA</title>
+  </head>
+  <body>
+    <div>Data Anda</div>
+    <hr />
+
+    <script>
+      const url = "http://localhost:8080/Sim";
+      //get data from server
+      function get() {
+        $.ajax({
+          url: url,
+          method: "GET",
+          dataType: "json",
+          success: function (data) {
+            //start function
+            $("Controller").find("/sim").empty(); //for empty table if data exists
+            $.each(data, function (key, value) {
+              //fill data to table
+              var td =
+                "<tr><td>" +
+                value.id +
+                "</td> <td>" +
+                value.nk +
+                "</td> <td>" +
+                value.nama + 
+                "</td> <td>" +
+                value.tl + 
+                "</td> <td>" +
+                value.photo + 
+                "</td> <td>" +
+                value.timestamp + 
+                "</td></tr>";
+              $("#mytable").find("tbody").append(td);
+            });
+          }, //end function
+        });
+      }
+
+      //create new data
+      function post() {
+        let editID = document.getElementById("id").value;
+        let NK = document.getElementById("nk").value;
+        let NAMA = document.getElementById("nama").value;
+        let TL = document.getElementById("tl").value;
+        let Photo = document.getElementById("photo").value;
+        let Timestamp = document.getElementById("timestamp").value;
+        let dataText = { id: editID, NK: nk, NAMA: nama, TL: tl, Photo: photo, Timestamp: timestamp };
+        let dataJson = JSON.stringify(dataText);
+        $.ajax({
+          url: "http://localhost:8080/Sim",
+          method: "POST",
+          data: dataJson,
+          contentType: "application/json",
+          dataType: "text",
+          success: function (result) {
+            get();
+          },
+        });
+      }
+
+      function put() {
+        let editID = document.getElementById("id").value;
+        let NK = document.getElementById("nk").value;
+        let NAMA = document.getElementById("nama").value;
+        let TL = document.getElementById("tl").value;
+        let Photo = document.getElementById("photo").value;
+        let Timestamp = document.getElementById("timestamp").value;
+        let dataText = { id: editID, NK: nk, NAMA: nama, TL: tl, Photo: photo, Timestamp: timestamp };
+        let dataJson = JSON.stringify(dataText);
+        $.ajax({
+          url: "http://localhost:8080/Sim",
+          method: "PUT",
+          data: dataJson,
+          contentType: "application/json",
+          dataType: "text",
+          success: function (result) {
+            get();
+          },
+        });
+      }
+
+      function delID() {
+        let editID = document.getElementById("ID").value;
+        let dataText = { id: editID };
+        let dataJson = JSON.stringify(dataText);
+        $.ajax({
+          url: "http://localhost:8080/Sim/delete/{id}",
+          method: "DELETE",
+          data: dataJson,
+          contentType: "application/json",
+          dataType: "text",
+          success: function (result) {
+            get();
+          },
+        });
+      }
+    </script>
+    <table>
+      <tr>
+        <td>ID</td>
+        <td>:</td>
+        <td><input type="text" id="id" name="ID" /></td>
+        <td><button onclick="get()">GET</button></td>
+      </tr>
+      </tr>
+      <tr>
+        <td>NK</td>
+        <td>:</td>
+        <td><input type="text" id="nk" name="nk" /></td>
+        <td><button onclick="post()">INSERT</button></td>
+      </tr>
+      <tr>
+        <td>NAMA</td>
+        <td>:</td>
+        <td><input type="text" id="nama" name="nama" /></td>
+        <td><button onclick="put()">UPDATE</button></td>
+      </tr>
+      <tr>
+        <tr>
+        <td>TL</td>
+        <td>:</td>
+        <td><input  type="date" id="TL" name="TL" /></td>
+        <td><button onclick="delID()">DELETE</button></td>
+        </tr>
+        <tr>
+        <td>Photo</td>
+        <td>:</td>
+        <td><input action="upload.php" method="post"enctype="multipart/form-data"  type="file" id="photo" name="photo" /></td>
+        </tr>
+        <tr>
+        <td>timestamp</td>
+        <td>:</td>
+        <td><input type="date" id="timestamp" name="timestamp" /></td>
+        </tr>
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+
+    <hr />
+    <br />
+
+    <table id="mytable" border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NK</th>
+          <th>NAMA</th>
+          <th>TL</th>
+          <th img src="image_view.php?id_gambar=<?php echo $row['id_photo']; ?>" width="100">Photo</th>
+          <th>timestamp</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </body>
+</html>
